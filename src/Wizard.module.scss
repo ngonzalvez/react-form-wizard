@@ -1,0 +1,81 @@
+.Wizard {
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  color: #222;
+
+  .progress {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 32px;
+    margin-bottom: 2em;
+    user-select: none;
+
+    .circle {
+      cursor: pointer;
+      border-radius: 50%;
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(black, 0.15);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 800;
+      color: rgba(black, 0.3);
+
+      &.done {
+        background: rgba(black, 0.3);
+        border-color: transparent;
+        color: white;
+      }
+
+      &.current {
+        background-color: #4186f3;
+        border-color: transparent;
+        color: white;
+      }
+    }
+
+    .line {
+      display: block;
+      width: 120px;
+      flex-shrink: 1;
+      height: 2px;
+      background-color: rgba(black, 0.15);
+    }
+  }
+
+  .title {
+    margin-bottom: 0.3em;
+  }
+
+  .stepTitle {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: rgba(black, 0.7);
+    margin-bottom: 0.5em;
+  }
+
+  .button {
+    background-color: #4186f3;
+    color: white;
+    border: none;
+    font-weight: 600;
+    padding: 10px 20px;
+    font-size: 13px;
+    border-radius: 4px;
+  }
+
+  .footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    border-top: 1px solid rgba(black, 0.1);
+    margin-top: 2em;
+    padding-top: 2em;
+  }
+}
