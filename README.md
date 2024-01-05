@@ -2,10 +2,13 @@
 <p align="center">Create form wizards in minutes</p>
 <h1></h1>
 
-![RWF Demo](blob:https://github.com/b39a71f6-a83e-4be7-90a9-98c5d714f4f1)
-
 #### Important Note 
 This is a work in progress. I'm actively developing this library, you can expect it to be live in a few days.
+
+<p align="center">
+  <img src="https://github.com/ngonzalvez/react-form-wizard/blob/main/rfw.gif" alt="RFW Demo"/>
+</p>
+
 
 #### Installation
 ```sh
@@ -13,7 +16,7 @@ npm install rfw
 ```
 
 #### Create a simple form
-
+Let's create a form with a single step. You can add as many steps as you want.
 
 ```typescript
 const formStep = {
