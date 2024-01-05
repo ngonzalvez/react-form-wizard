@@ -1,41 +1,51 @@
-import React, { FC, useState, useMemo, useCallback } from "react";
+import React, { FC, useState, useMemo, useCallback, useEffect } from "react";
 import classNames from "classnames";
 import SelectField from "./SelectField";
 import TextField from "./TextField";
 import CheckboxField from "./CheckboxField";
+import DateField from "./DateField";
 import Label from "./Label";
+import Progress from "./Progress";
+import Flex from "./Flex";
 import styles from "./Wizard.module.scss";
 
-const typeToComponentdMap = {
+const typeToComponentMap = {
   select: SelectField,
   text: TextField,
-  checkbox: CheckboxField,
+  checkboxes: CheckboxField,
+  date: DateField,
 };
 
-interface WizardProps {
+interface Field {
+  key: string;
+  type: string;
+  label: string;
+  value?: any;
+  onChange?: React.ChangeEventHandler<any>;
+  className?: string;
+}
+
+interface Step {
   title: string;
+  instructions?: string;
+  fields: Field | Field[];
+}
+
+interface WizardProps {
   submitLabel?: string;
-  steps: Array<{
-    title: string;
-    fields: Array<{
-      key: string;
-      type: string;
-      label: string;
-      value?: any;
-      onChange?: React.ChangeEventHandler<any>;
-    }>;
-  }>;
+  steps: Step[];
 }
 
 /**
  * Creates a wizard with the given steps.
  */
-const Wizard: FC<WizardProps> = ({ title, steps, submitLabel }) => {
+const Wizard: FC<WizardProps> = ({ steps, submitLabel }) => {
   //--------------------------------------------------------------------------------------------------------------------
   //                                                       STATE
   //--------------------------------------------------------------------------------------------------------------------
   const [currentStepIdx, setCurrentStepIdx] = useState(0);
-  const { title: stepTitle, fields: fieldsData } = useMemo(() => steps[currentStepIdx], [steps, currentStepIdx]);
+  const step = useMemo(() => steps[currentStepIdx], [steps, currentStepIdx]);
+  const [data, setData] = useState({});
 
   //--------------------------------------------------------------------------------------------------------------------
   //                                                     CALLBACKS
@@ -61,43 +71,37 @@ const Wizard: FC<WizardProps> = ({ title, steps, submitLabel }) => {
     console.log("Form submitted");
   }, []);
 
+  /**
+   * Sets the value of a field.
+   */
+  const setFieldValue = useCallback((field: Field, value: any) => {
+    setData((data) => ({ ...data, [field.key]: value }));
+  });
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
   //--------------------------------------------------------------------------------------------------------------------
   //                                                   DOM STRUCTURE
   //--------------------------------------------------------------------------------------------------------------------
-  const progress = useMemo(
-    () => (
-      <div className={styles.progress}>
-        {steps.map((step, i) => (
-          <>
-            {i > 0 && <div className={styles.line} key={`step_${i + 1}_line`}></div>}
-            <div
-              className={classNames(styles.circle, {
-                [styles.current]: i === currentStepIdx,
-                [styles.done]: i < currentStepIdx,
-              })}
-              key={`step_${i + 1}`}
-              title={step.title}
-            >
-              {i + 1}
-            </div>
-          </>
-        ))}
-      </div>
-    ),
-    [steps, currentStepIdx]
-  );
-
   const fields = useMemo(() => {
-    return steps[currentStepIdx].fields.map(({ label, ...field }) => {
-      const Component = typeToComponentdMap[field.type];
+    return steps[currentStepIdx].fields.map((fields, rowIndex) => {
+      const rowFields = Array.isArray(fields) ? fields : [fields];
       return (
-        <>
-          <Label>{label}</Label>
-          <Component {...field} />
-        </>
+        <Flex className={styles.row} key={"row_" + rowIndex}>
+          {rowFields.map(({ label, ...field }) => {
+            const Component = typeToComponentMap[field.type];
+            return (
+              <Label text={label} key={field.key + "_label"}>
+                <Component {...field} onChange={(value) => setFieldValue(field, value)} />
+              </Label>
+            );
+          })}
+        </Flex>
       );
     });
-  }, [fieldsData]);
+  }, [step.fields]);
 
   const footer = useMemo(() => {
     return (
@@ -123,9 +127,9 @@ const Wizard: FC<WizardProps> = ({ title, steps, submitLabel }) => {
 
   return (
     <div className={styles.Wizard}>
-      {progress}
-      {title && <h1 className={styles.title}>{title}</h1>}
-      {stepTitle && <h3 className={styles.stepTitle}>{stepTitle}</h3>}
+      <Progress total={steps.length} current={currentStepIdx} />
+      {step.title && <h1 className={styles.title}>{step.title}</h1>}
+      {step.instructions && <h3 className={styles.instructions}>{step.instructions}</h3>}
       {fields}
       {footer}
     </div>

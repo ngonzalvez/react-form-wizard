@@ -1,18 +1,17 @@
 import { FC, useCallback } from "react";
 import classNames from "classnames";
-import styles from "./TextField.module.scss";
+import styles from "./DateField.module.scss";
 
-interface TextFieldProps {
+interface DateFieldProps {
   value: string;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
-  placeholder?: string;
   className?: string;
 }
 
 /**
- * A text field.
+ * A date picker component.
  */
-const TextField: FC<TextFieldProps> = ({ value, onChange, placeholder, className }) => {
+const DateField: FC<DateFieldProps> = ({ value, onChange, className }) => {
   //--------------------------------------------------------------------------------------------------------------------
   //                                                     CALLBACKS
   //--------------------------------------------------------------------------------------------------------------------
@@ -27,14 +26,8 @@ const TextField: FC<TextFieldProps> = ({ value, onChange, placeholder, className
   //                                                   DOM STRUCTURE
   //--------------------------------------------------------------------------------------------------------------------
   return (
-    <input
-      className={classNames(styles.TextField, className)}
-      type="text"
-      value={value}
-      onChange={handleChange}
-      placeholder={placeholder}
-    />
+    <input className={classNames(styles.DateField, className)} type="date" value={value} onChange={handleChange} />
   );
 };
 
-export default TextField;
+export default DateField;

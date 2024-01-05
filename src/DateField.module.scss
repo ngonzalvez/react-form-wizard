@@ -1,0 +1,14 @@
+.DateField {
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid rgba(black, 0.15);
+  margin-top: 0.3em;
+  font-size: 14px;
+
+  &::-webkit-datetime-edit-month-field,
+  &::-webkit-datetime-edit-day-field,
+  &::-webkit-datetime-edit-year-field,
+  &::-webkit-datetime-edit-text {
+    color: rgba(black, 0.5);
+  }
+}
