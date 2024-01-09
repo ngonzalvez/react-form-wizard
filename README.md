@@ -77,6 +77,7 @@ const formStep = {
 };
 <Wizard steps={[formStep]}/>
 ```
+<h1></h1>
 
 #### Form submission
 Use the `onSubmit` prop to pass your submission handler function.
