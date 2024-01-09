@@ -21,6 +21,8 @@ npm install rfw
 Let's create a form with a single step.
 
 ```typescript
+import Wizard from 'react-form-wizard';
+
 const formStep = {
   title: 'Hi there!',
   instructions: 'Tell us a little bit about you.',
@@ -37,7 +39,7 @@ const formStep = {
 <h1></h1>
 
 #### Adding more steps
-In order to add more steps for your wizard, simply add the step config to the a `steps` array.
+In order to add more steps for your wizard, simply add the step config to the a `steps` array. When there's more than one step, you'll see the progress of the wizard at the top.
 
 ```typescript
 <Wizard steps={[firstStep, secondStep, thirdStep]}/>
@@ -63,6 +65,18 @@ const formStep = {
   <img src="https://github.com/ngonzalvez/react-form-wizard/blob/main/images/multiple-fields-per-row.jpg" alt="Multiple fields per row"/>
 </p>
 <h1></h1>
+
+#### Having a field depend on another field
+Sometimes the options available for one field is dependant on the value of another field.For example, when entering the address the cities you can choose are dictated by the state you have previously selected. 
+```typescript
+const formStep = {
+  fields: [
+      { key: 'state', label: 'State', type: 'select', options: getAllStates() },
+      { key: 'city', label: 'City', type: 'select', dependsOn: 'state', options: (data) => getAllCitiesByState(data.state) },
+  ]
+};
+<Wizard steps={[formStep]}/>
+```
 
 #### Form submission
 Use the `onSubmit` prop to pass your submission handler function.
