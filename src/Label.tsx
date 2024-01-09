@@ -8,10 +8,10 @@ interface LabelProps {
 
 const Label: FC<LabelProps> = ({ text, children }) => {
   return (
-    <div className={styles.Container}>
-      <label className={styles.Label}>{text}</label>
+    <label className={styles.Label}>
+      {text}
       {children}
-    </div>
+    </label>
   );
 };
 
