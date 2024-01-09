@@ -8,12 +8,14 @@ This is a work in progress. I'm actively developing this library, you can expect
 <p align="center">
   <img src="https://github.com/ngonzalvez/react-form-wizard/blob/main/images/demo.gif" alt="RFW Demo"/>
 </p>
+<h1></h1>
 
 
 #### Installation
 ```sh
 npm install rfw
 ```
+<h1></h1>
 
 #### Create a simple form
 Let's create a form with a single step.
@@ -32,6 +34,7 @@ const formStep = {
 <p align="center">
   <img src="https://github.com/ngonzalvez/react-form-wizard/blob/main/images/simple-form.jpg" alt="Simple form"/>
 </p>
+<h1></h1>
 
 #### Adding more steps
 In order to add more steps for your wizard, simply add the step config to the a `steps` array.
@@ -39,6 +42,7 @@ In order to add more steps for your wizard, simply add the step config to the a 
 ```typescript
 <Wizard steps={[firstStep, secondStep, thirdStep]}/>
 ```
+<h1></h1>
 
 #### Multiple fields per row
 The `fields` array in the step config can contain a field description, or an array of field descriptions. If you pass an array of field descriptions, `wizard.js` will place those fields in the same row.
@@ -60,6 +64,7 @@ const formStep = {
 <p align="center">
   <img src="https://github.com/ngonzalvez/react-form-wizard/blob/main/images/multiple-fields-per-row.jpg" alt="Multiple fields per row"/>
 </p>
+<h1></h1>
 
 #### Form submission
 Use the `onSubmit` prop to pass your submission handler function.
@@ -69,6 +74,7 @@ const handleSubmit = (data: Record<string, any>) => console.log('Form data:', da
 
 <Wizard steps={[formStep]} onSubmit={handleSubmit]/>
 ```
+<h1></h1>
 
 #### Built With
 - `Javascript`
