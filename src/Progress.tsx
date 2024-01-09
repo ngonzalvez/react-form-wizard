@@ -13,6 +13,8 @@ interface ProgressProps {
 const Progress: FC<ProgressProps> = ({ total, current }) => {
   const components = [];
 
+  if (total < 2) return null;
+
   for (let i = 0; i < total; i++) {
     if (i > 0) components.push(<div className={styles.Line} key={`step_${i + 1}_line`}></div>);
     components.push(
