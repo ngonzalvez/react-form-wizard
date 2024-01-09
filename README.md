@@ -48,8 +48,6 @@ In order to add more steps for your wizard, simply add the step config to the a 
 The `fields` array in the step config can contain a field description, or an array of field descriptions. If you pass an array of field descriptions, `wizard.js` will place those fields in the same row.
 ```typescript
 const formStep = {
-  title: 'Hi there!',
-  instructions: 'Tell us a little bit about you.',
   fields: [
     // Include both fields in the same row.
     [
