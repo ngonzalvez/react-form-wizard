@@ -21,25 +21,27 @@ interface Field {
   type: string;
   label: string;
   value?: any;
-  onChange?: React.ChangeEventHandler<any>;
+  onChange?: (value: any) => void;
   className?: string;
 }
 
 interface Step {
   title: string;
   instructions?: string;
-  fields: Field | Field[];
+  fields: Array<Field | Field[]>;
 }
 
 interface WizardProps {
   submitLabel?: string;
   steps: Step[];
+  onChange?: (data: Record<string, any>) => void | Promise<void>;
+  onSubmit?: (data: Record<string, any>) => void | Promise<void>;
 }
 
 /**
  * Creates a wizard with the given steps.
  */
-const Wizard: FC<WizardProps> = ({ steps, submitLabel }) => {
+const Wizard: FC<WizardProps> = ({ steps, submitLabel, onChange, onSubmit }) => {
   //--------------------------------------------------------------------------------------------------------------------
   //                                                       STATE
   //--------------------------------------------------------------------------------------------------------------------
@@ -68,19 +70,18 @@ const Wizard: FC<WizardProps> = ({ steps, submitLabel }) => {
    * Submits the form.
    */
   const submit = useCallback(() => {
-    console.log("Form submitted");
-  }, []);
+    onSubmit?.(data);
+  }, [onSubmit, data]);
 
   /**
    * Sets the value of a field.
    */
-  const setFieldValue = useCallback((field: Field, value: any) => {
-    setData((data) => ({ ...data, [field.key]: value }));
-  });
+  const setFieldValue = (field: Field, value: any) => {
+    const newData = { ...data, [field.key]: value };
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+    setData(newData);
+    onChange?.(newData);
+  };
 
   //--------------------------------------------------------------------------------------------------------------------
   //                                                   DOM STRUCTURE
@@ -90,18 +91,18 @@ const Wizard: FC<WizardProps> = ({ steps, submitLabel }) => {
       const rowFields = Array.isArray(fields) ? fields : [fields];
       return (
         <Flex className={styles.row} key={"row_" + rowIndex}>
-          {rowFields.map(({ label, ...field }) => {
+          {rowFields.map((field) => {
             const Component = typeToComponentMap[field.type];
             return (
-              <Label text={label} key={field.key + "_label"}>
-                <Component {...field} onChange={(value) => setFieldValue(field, value)} />
+              <Label text={field.label} key={field.key + "_label"}>
+                <Component {...field} onChange={(value) => setFieldValue(field, value)} data={data} />
               </Label>
             );
           })}
         </Flex>
       );
     });
-  }, [step.fields]);
+  }, [step.fields, data]);
 
   const footer = useMemo(() => {
     return (

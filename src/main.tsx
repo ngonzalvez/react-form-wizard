@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import { Country, State, City } from "country-state-city";
+import { State, City } from "country-state-city";
 import Wizard from "./Wizard";
 import "./styles.css";
 
@@ -58,14 +58,16 @@ const formSteps = [
           key: "state",
           label: "State",
           type: "select",
-          options: states,
-          placeholder: "Select a city",
+          options: State.getStatesOfCountry("US").map((state) => ({ value: state.isoCode, label: state.name })),
+          placeholder: "Select a state",
         },
         {
           key: "city",
           label: "City",
           type: "select",
-          options: cities,
+          options: (data) =>
+            City.getCitiesOfState("US", data.state).map((city) => ({ value: city.name, label: city.name })),
+          dependsOn: "state",
           placeholder: "Select a city",
         },
       ],
@@ -105,7 +107,6 @@ const formSteps = [
           { value: "wrongItem", label: "Wrong Item" },
           { value: "damaged", label: "Damaged" },
           { value: "quality", label: "Bad Quality" },
-          { value: "size", label: "Wrong Size" },
         ],
         placeholder: "Select a reason",
       },
@@ -113,7 +114,15 @@ const formSteps = [
   },
 ];
 
-const component = <Wizard steps={formSteps} submitLabel="Apply Now" />;
+const logData = (data: Record<string, any>) => {
+  console.log("Data:", data);
+};
+
+const onSubmit = (data: Record<string, any>) => {
+  console.log("Submitting:", data);
+};
+
+const component = <Wizard steps={formSteps} submitLabel="Request RMA" onChange={logData} />;
 
 const domNode = document.getElementById("root");
 if (!domNode) throw new Error("Couldnt find root element");
