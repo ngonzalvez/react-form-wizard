@@ -61,6 +61,15 @@ const formStep = {
   <img src="https://github.com/ngonzalvez/react-form-wizard/blob/main/images/multiple-fields-per-row.jpg" alt="Multiple fields per row"/>
 </p>
 
+#### Form submission
+Use the `onSubmit` prop to pass your submission handler function.
+
+```typescript
+const handleSubmit = (data: Record<string, any>) => console.log('Form data:', data);
+
+<Wizard steps={[formStep]} onSubmit={handleSubmit]/>
+```
+
 #### Built With
 - `Javascript`
 - `React`
