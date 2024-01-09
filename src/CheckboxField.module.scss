@@ -45,6 +45,7 @@
   width: 24px;
   background-color: #eee;
   border-radius: 4px;
+  flex-grow: 0;
 
   &:after {
     display: none; // Hide the checkmark when the checkbox is not checked.
