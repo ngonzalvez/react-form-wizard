@@ -21,7 +21,7 @@ npm install rfw
 Let's create a form with a single step.
 
 ```typescript
-import Wizard from 'react-form-wizard';
+import Wizard from 'rfw';
 
 const formStep = {
   title: 'Hi there!',
