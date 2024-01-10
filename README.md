@@ -90,6 +90,6 @@ const handleSubmit = (data: Record<string, any>) => console.log('Form data:', da
 <h1></h1>
 
 #### Built With
-- `Javascript`
-- `React`
-- `classnames`
+- [Typescript](https://www.typescriptlang.org)
+- [React](https://react.dev)
+- [classnames](https://github.com/JedWatson/classnames) 
