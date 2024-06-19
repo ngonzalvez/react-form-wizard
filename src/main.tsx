@@ -1,6 +1,6 @@
 import { createRoot } from "react-dom/client";
 import { State, City } from "country-state-city";
-import Wizard from "./Wizard";
+import Wizard, { WizardStep } from "./Wizard";
 import "./styles.css";
 
 const states = [
@@ -21,7 +21,7 @@ const cities = [
   { value: "CH", label: "Chicago" },
 ];
 
-const formSteps = [
+const formSteps: WizardStep[] = [
   // Personal info step.
   {
     title: "Hi!",

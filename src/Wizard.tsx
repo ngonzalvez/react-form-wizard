@@ -1,39 +1,18 @@
-import React, { FC, useState, useMemo, useCallback, useEffect } from "react";
-import classNames from "classnames";
-import SelectField from "./SelectField";
-import TextField from "./TextField";
-import CheckboxField from "./CheckboxField";
-import DateField from "./DateField";
-import Label from "./Label";
+import { FC, useState, useMemo, useCallback } from "react";
 import Progress from "./Progress";
-import Flex from "./Flex";
 import styles from "./Wizard.module.scss";
+import Form from "./Form";
+import { FieldProps } from "./Field";
 
-const typeToComponentMap = {
-  select: SelectField,
-  text: TextField,
-  checkboxes: CheckboxField,
-  date: DateField,
-};
-
-interface Field {
-  key: string;
-  type: string;
-  label: string;
-  value?: any;
-  onChange?: (value: any) => void;
-  className?: string;
-}
-
-interface Step {
-  title: string;
+export interface WizardStep {
+  title?: string;
   instructions?: string;
-  fields: Array<Field | Field[]>;
+  fields: Array<FieldProps | FieldProps[]>;
 }
 
 interface WizardProps {
   submitLabel?: string;
-  steps: Step[];
+  steps: WizardStep[];
   onChange?: (data: Record<string, any>) => void | Promise<void>;
   onSubmit?: (data: Record<string, any>) => void | Promise<void>;
 }
@@ -76,8 +55,8 @@ const Wizard: FC<WizardProps> = ({ steps, submitLabel, onChange, onSubmit }) => 
   /**
    * Sets the value of a field.
    */
-  const setFieldValue = (field: Field, value: any) => {
-    const newData = { ...data, [field.key]: value };
+  const setFieldValue = (field: string, value: any) => {
+    const newData = { ...data, [field]: value };
 
     setData(newData);
     onChange?.(newData);
@@ -86,39 +65,21 @@ const Wizard: FC<WizardProps> = ({ steps, submitLabel, onChange, onSubmit }) => 
   //--------------------------------------------------------------------------------------------------------------------
   //                                                   DOM STRUCTURE
   //--------------------------------------------------------------------------------------------------------------------
-  const fields = useMemo(() => {
-    return steps[currentStepIdx].fields.map((fields, rowIndex) => {
-      const rowFields = Array.isArray(fields) ? fields : [fields];
-      return (
-        <Flex className={styles.row} key={"row_" + rowIndex}>
-          {rowFields.map((field) => {
-            const Component = typeToComponentMap[field.type];
-            return (
-              <Label text={field.label} key={field.key + "_label"}>
-                <Component {...field} onChange={(value) => setFieldValue(field, value)} data={data} />
-              </Label>
-            );
-          })}
-        </Flex>
-      );
-    });
-  }, [step.fields, data]);
-
   const footer = useMemo(() => {
     return (
-      <footer className={styles.footer}>
+      <footer className={styles.Footer}>
         {currentStepIdx > 0 && (
-          <button className={styles.button} onClick={goToPreviousStep}>
+          <button className={styles.Button} onClick={goToPreviousStep}>
             Previous
           </button>
         )}
         {currentStepIdx < steps.length - 1 && (
-          <button className={styles.button} onClick={goToNextStep}>
+          <button className={styles.Button} onClick={goToNextStep}>
             Next
           </button>
         )}
         {currentStepIdx === steps.length - 1 && (
-          <button className={styles.button} onClick={submit}>
+          <button className={styles.Button} onClick={submit}>
             {submitLabel || "Submit"}
           </button>
         )}
@@ -129,9 +90,13 @@ const Wizard: FC<WizardProps> = ({ steps, submitLabel, onChange, onSubmit }) => 
   return (
     <div className={styles.Wizard}>
       <Progress total={steps.length} current={currentStepIdx} />
-      {step.title && <h1 className={styles.title}>{step.title}</h1>}
-      {step.instructions && <h3 className={styles.instructions}>{step.instructions}</h3>}
-      {fields}
+      <Form
+        title={step.title}
+        instructions={step.instructions}
+        fields={step.fields}
+        setFieldValue={setFieldValue}
+        data={data}
+      />
       {footer}
     </div>
   );
