@@ -5,12 +5,13 @@ interface CheckboxFieldProps {
   name: string;
   options: string[] | Array<{ value: string; label: string }>;
   onChange: (values: Record<string, boolean>) => any;
+  onBlur?: () => void | Promise<void>;
 }
 
 /**
  * A checkbox field.
  */
-const CheckboxField: FC<CheckboxFieldProps> = ({ name, options, onChange }) => {
+const CheckboxField: FC<CheckboxFieldProps> = ({ name, options, onChange, onBlur }) => {
   //--------------------------------------------------------------------------------------------------------------------
   //                                                       STATE
   //--------------------------------------------------------------------------------------------------------------------
@@ -26,7 +27,7 @@ const CheckboxField: FC<CheckboxFieldProps> = ({ name, options, onChange }) => {
       const newValue = { ...values, [e.target.name]: e.target.checked };
       setValues(newValue);
       onChange(newValue);
-      console.log("Handle checkbox change", newValue);
+      onBlur();
     },
     [onChange]
   );

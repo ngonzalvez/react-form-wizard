@@ -1,6 +1,8 @@
 import { createRoot } from "react-dom/client";
+import z from "zod";
 import { State, City } from "country-state-city";
 import Wizard, { WizardStep } from "./Wizard";
+
 import "./styles.css";
 
 const states = [
@@ -26,12 +28,15 @@ const formSteps: WizardStep[] = [
   {
     title: "Hi!",
     instructions: "Tell us about yourself.",
+    key: "personalInfo",
     fields: [
       {
         key: "name",
         label: "Full Name",
         type: "text",
         placeholder: "John Smith",
+        required: true,
+        schema: z.string().min(3),
       },
       {
         key: "phone",
@@ -52,6 +57,7 @@ const formSteps: WizardStep[] = [
   {
     title: "Almost done,",
     instructions: "What's your home address?",
+    key: "address",
     fields: [
       [
         {
@@ -92,6 +98,7 @@ const formSteps: WizardStep[] = [
   {
     title: "That's it!",
     instructions: "We just need some information about your purchase.",
+    key: "purchaseInfo",
     fields: [
       [
         { key: "orderNumber", label: "Order Number", type: "text", placeholder: "e.g. 123456789" },

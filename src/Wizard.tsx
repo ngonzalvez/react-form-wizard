@@ -3,6 +3,7 @@ import Progress from "./Progress";
 import styles from "./Wizard.module.scss";
 import Form from "./Form";
 import { FieldProps } from "./Field";
+import Button from "./Button";
 
 export interface WizardStep {
   title?: string;
@@ -52,40 +53,20 @@ const Wizard: FC<WizardProps> = ({ steps, submitLabel, onChange, onSubmit }) => 
     onSubmit?.(data);
   }, [onSubmit, data]);
 
-  /**
-   * Sets the value of a field.
-   */
-  const setFieldValue = (field: string, value: any) => {
-    const newData = { ...data, [field]: value };
-
-    setData(newData);
-    onChange?.(newData);
-  };
+  const handleChange = useCallback(
+    (stepData: Record<string, any>) => {
+      setData((data) => ({ ...data, [step.key]: stepData }));
+    },
+    [step]
+  );
 
   //--------------------------------------------------------------------------------------------------------------------
   //                                                   DOM STRUCTURE
   //--------------------------------------------------------------------------------------------------------------------
-  const footer = useMemo(() => {
-    return (
-      <footer className={styles.Footer}>
-        {currentStepIdx > 0 && (
-          <button className={styles.Button} onClick={goToPreviousStep}>
-            Previous
-          </button>
-        )}
-        {currentStepIdx < steps.length - 1 && (
-          <button className={styles.Button} onClick={goToNextStep}>
-            Next
-          </button>
-        )}
-        {currentStepIdx === steps.length - 1 && (
-          <button className={styles.Button} onClick={submit}>
-            {submitLabel || "Submit"}
-          </button>
-        )}
-      </footer>
-    );
-  }, [currentStepIdx, steps.length]);
+  const additionalButtons = currentStepIdx > 0 ? <Button onClick={goToPreviousStep}>Previous</Button> : null;
+  const isLastStep = currentStepIdx === steps.length - 1;
+  const buttonLabel = isLastStep ? "Submit" : "Next";
+  const buttonAction = isLastStep ? submit : goToNextStep;
 
   return (
     <div className={styles.Wizard}>
@@ -94,10 +75,11 @@ const Wizard: FC<WizardProps> = ({ steps, submitLabel, onChange, onSubmit }) => 
         title={step.title}
         instructions={step.instructions}
         fields={step.fields}
-        setFieldValue={setFieldValue}
-        data={data}
+        onChange={handleChange}
+        submitLabel={buttonLabel}
+        onSubmit={buttonAction}
+        buttons={additionalButtons}
       />
-      {footer}
     </div>
   );
 };

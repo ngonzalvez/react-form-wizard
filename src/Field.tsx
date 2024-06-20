@@ -1,9 +1,13 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import SelectField from "./SelectField";
 import TextField from "./TextField";
 import CheckboxField from "./CheckboxField";
 import DateField from "./DateField";
 import Label from "./Label";
+
+import styles from "./Field.module.scss";
+import { ZodTypeAny } from "zod";
+import classNames from "classnames";
 
 interface Option {
   value: string;
@@ -15,15 +19,21 @@ export interface FieldConfig {
   type: "select" | "text" | "checkboxes" | "date";
   data: Record<string, any>;
   label: string;
-  value?: any;
-  onChange?: (value: any) => void;
+  value?: string | number | boolean | Date | Array<string> | null;
   placeholder?: string;
   options?: Array<Option> | ((data: Record<string, any>) => Array<Option>);
   dependsOn?: string;
   className?: string;
+  required: boolean;
+  schema?: ZodTypeAny;
 }
 
-interface FieldProps extends Exclude<FieldConfig, "key"> {}
+interface FieldProps extends Exclude<FieldConfig, "key"> {
+  isDirty?: boolean;
+  onBlur?: () => void;
+  onChange?: (value: any) => void;
+  error?: string;
+}
 
 const typeToComponentMap = {
   select: SelectField,
@@ -32,16 +42,39 @@ const typeToComponentMap = {
   date: DateField,
 };
 
-const Field: FC<FieldProps> = ({ type, label, value, onChange, className, placeholder, options, dependsOn, data }) => {
+const Field: FC<FieldProps> = ({
+  type,
+  label,
+  value,
+  onChange,
+  onBlur,
+  className,
+  placeholder,
+  isDirty,
+  options,
+  dependsOn,
+  data,
+  error,
+}) => {
   const Component = typeToComponentMap[type] as any;
+  const errorMessage = useMemo(() => {
+    if (!error || !isDirty) return null;
+    return (
+      <span className={styles.Error} title={error}>
+        {error}
+      </span>
+    );
+  }, [error, isDirty]);
+
   return (
-    <Label text={label}>
+    <Label text={label} right={errorMessage}>
       <Component
         data={data}
         onChange={onChange}
         value={value}
-        className={className}
+        className={classNames(styles.Field, className, { [styles.error]: Boolean(error) })}
         placeholder={placeholder}
+        onBlur={onBlur}
         options={options}
         dependsOn={dependsOn}
       />

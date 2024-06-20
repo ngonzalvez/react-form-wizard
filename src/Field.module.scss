@@ -1,0 +1,15 @@
+$error-color: #dd5566;
+
+.Error {
+  color: $error-color;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.Field {
+  outline: none;
+
+  &.error {
+    outline: 1px solid $error-color;
+  }
+}

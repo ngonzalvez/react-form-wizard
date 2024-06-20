@@ -12,6 +12,7 @@ export interface SelectFieldProps {
   options: string[] | Option[] | ((data: DataMap) => string[] | Option[]);
   placeholder: string;
   onChange: (value: string) => void | Promise<void>;
+  onBlur: () => void | Promise<void>;
   dependsOn?: string;
   data: DataMap;
 }
@@ -19,7 +20,7 @@ export interface SelectFieldProps {
 /**
  * A select field.
  */
-const SelectField: FC<SelectFieldProps> = ({ options, placeholder, onChange, data, dependsOn }) => {
+const SelectField: FC<SelectFieldProps> = ({ options, placeholder, onChange, data, dependsOn, onBlur }) => {
   const choices = useMemo(() => {
     const optionsData = Array.isArray(options) ? options : options(data);
     return optionsData.map((option) => {
@@ -48,7 +49,7 @@ const SelectField: FC<SelectFieldProps> = ({ options, placeholder, onChange, dat
   //--------------------------------------------------------------------------------------------------------------------
   return (
     <div className={styles.wrapper}>
-      <select onChange={handleChange} className={styles.select}>
+      <select onChange={handleChange} className={styles.select} onBlur={onBlur}>
         <option value="">{placeholder}</option>
         {choices}
       </select>

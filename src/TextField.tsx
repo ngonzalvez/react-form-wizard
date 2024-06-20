@@ -4,15 +4,16 @@ import styles from "./TextField.module.scss";
 
 interface TextFieldProps {
   value: string;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  onChange: (value: string) => void | Promise<void>;
   placeholder?: string;
   className?: string;
+  onBlur?: () => void | Promise<void>;
 }
 
 /**
  * A text field.
  */
-const TextField: FC<TextFieldProps> = ({ value, onChange, placeholder, className }) => {
+const TextField: FC<TextFieldProps> = ({ value, onChange, onBlur, placeholder, className }) => {
   //--------------------------------------------------------------------------------------------------------------------
   //                                                     CALLBACKS
   //--------------------------------------------------------------------------------------------------------------------
@@ -32,6 +33,7 @@ const TextField: FC<TextFieldProps> = ({ value, onChange, placeholder, className
       type="text"
       value={value}
       onChange={handleChange}
+      onBlur={onBlur}
       placeholder={placeholder}
     />
   );

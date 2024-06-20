@@ -6,12 +6,13 @@ interface DateFieldProps {
   value: string;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
   className?: string;
+  onBlur?: () => void | Promise<void>;
 }
 
 /**
  * A date picker component.
  */
-const DateField: FC<DateFieldProps> = ({ value, onChange, className }) => {
+const DateField: FC<DateFieldProps> = ({ value, onChange, className, onBlur }) => {
   //--------------------------------------------------------------------------------------------------------------------
   //                                                     CALLBACKS
   //--------------------------------------------------------------------------------------------------------------------
@@ -26,7 +27,13 @@ const DateField: FC<DateFieldProps> = ({ value, onChange, className }) => {
   //                                                   DOM STRUCTURE
   //--------------------------------------------------------------------------------------------------------------------
   return (
-    <input className={classNames(styles.DateField, className)} type="date" value={value} onChange={handleChange} />
+    <input
+      className={classNames(styles.DateField, className)}
+      type="date"
+      value={value}
+      onChange={handleChange}
+      onBlur={onBlur}
+    />
   );
 };
 

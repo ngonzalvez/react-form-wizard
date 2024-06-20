@@ -16,3 +16,12 @@
 .Row {
   gap: 14px;
 }
+
+.Footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  border-top: 1px solid rgba(black, 0.1);
+  margin-top: 2em;
+  padding-top: 2em;
+}
