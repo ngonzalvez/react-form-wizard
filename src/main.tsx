@@ -32,6 +32,12 @@ const formSteps: WizardStep[] = [
     key: "personalInfo",
     fields: [
       {
+        key: "intro-image",
+        type: "image",
+        src: "https://www.cheggindia.com/wp-content/uploads/2021/02/How-To-Introduce-Yourself-in-English-Like-a-Pro.png",
+        alt: "A person introducing themselves.",
+      },
+      {
         key: "name",
         label: "Full Name",
         type: "text",
@@ -109,7 +115,7 @@ const formSteps: WizardStep[] = [
       {
         key: "reason",
         label: "RMA Reason",
-        type: "checkboxes",
+        type: "checkbox",
         options: [
           { value: "defective", label: "Defecive" },
           { value: "wrongItem", label: "Wrong Item" },
@@ -130,12 +136,12 @@ const onSubmit = (data: Record<string, any>) => {
   console.log("Submitting:", data);
 };
 
-const { title, instructions, fields } = formSteps[0];
+const component = <FormWizard steps={formSteps} submitLabel="Request RMA" onChange={logData} onSubmit={onSubmit} />;
 
-// const component = <FormWizard steps={formSteps} submitLabel="Request RMA" onChange={logData} />;
-const component = (
-  <Form title={title} instructions={instructions} fields={fields} onChange={logData} onSubmit={onSubmit} />
-);
+//const { title, instructions, fields } = formSteps[0];
+//const component = (
+//  <Form title={title} instructions={instructions} fields={fields} onChange={logData} onSubmit={onSubmit} />
+//);
 
 const domNode = document.getElementById("root");
 if (!domNode) throw new Error("Couldnt find root element");

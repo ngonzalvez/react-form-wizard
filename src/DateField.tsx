@@ -1,18 +1,30 @@
 import { FC, useCallback } from "react";
 import classNames from "classnames";
 import styles from "./DateField.module.scss";
+import { ZodTypeAny } from "zod";
+import { DataMap } from "./SelectField";
+
+export interface DateInputConfig {
+  key: string;
+  label: string;
+  type: "date";
+  className?: string;
+  placeholder?: string;
+  required?: boolean;
+  schema?: ZodTypeAny;
+}
 
 interface DateFieldProps {
-  value: string;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
-  className?: string;
+  config: DateInputConfig;
+  onChange: (value: string) => void | Promise<void>;
   onBlur?: () => void | Promise<void>;
+  data: DataMap;
 }
 
 /**
  * A date picker component.
  */
-const DateField: FC<DateFieldProps> = ({ value, onChange, className, onBlur }) => {
+const DateField: FC<DateFieldProps> = ({ config, data, onChange, onBlur }) => {
   //--------------------------------------------------------------------------------------------------------------------
   //                                                     CALLBACKS
   //--------------------------------------------------------------------------------------------------------------------
@@ -28,9 +40,9 @@ const DateField: FC<DateFieldProps> = ({ value, onChange, className, onBlur }) =
   //--------------------------------------------------------------------------------------------------------------------
   return (
     <input
-      className={classNames(styles.DateField, className)}
+      className={classNames(styles.DateField, config.className)}
       type="date"
-      value={value}
+      value={data[config.key]}
       onChange={handleChange}
       onBlur={onBlur}
     />

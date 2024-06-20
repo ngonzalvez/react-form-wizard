@@ -1,19 +1,30 @@
 import { FC, useCallback } from "react";
 import classNames from "classnames";
 import styles from "./TextField.module.scss";
+import { ZodTypeAny } from "zod";
+import { DataMap } from "./SelectField";
 
-interface TextFieldProps {
-  value: string;
-  onChange: (value: string) => void | Promise<void>;
+export interface TextInputConfig {
+  key: string;
+  type: "text";
+  label: string;
   placeholder?: string;
   className?: string;
+  required?: boolean;
+  schema?: ZodTypeAny;
+}
+
+interface TextFieldProps {
+  config: TextInputConfig;
+  onChange: (value: string) => void | Promise<void>;
   onBlur?: () => void | Promise<void>;
+  data: DataMap;
 }
 
 /**
  * A text field.
  */
-const TextField: FC<TextFieldProps> = ({ value, onChange, onBlur, placeholder, className }) => {
+const TextField: FC<TextFieldProps> = ({ data, onChange, onBlur, config }) => {
   //--------------------------------------------------------------------------------------------------------------------
   //                                                     CALLBACKS
   //--------------------------------------------------------------------------------------------------------------------
@@ -29,12 +40,12 @@ const TextField: FC<TextFieldProps> = ({ value, onChange, onBlur, placeholder, c
   //--------------------------------------------------------------------------------------------------------------------
   return (
     <input
-      className={classNames(styles.TextField, className)}
+      className={classNames(styles.TextField, config.className)}
       type="text"
-      value={value}
+      value={data[config.key] || ""}
       onChange={handleChange}
       onBlur={onBlur}
-      placeholder={placeholder}
+      placeholder={config.placeholder}
     />
   );
 };

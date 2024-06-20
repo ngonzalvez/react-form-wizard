@@ -1,33 +1,18 @@
 import { FC, useMemo } from "react";
-import SelectField from "./SelectField";
-import TextField from "./TextField";
-import CheckboxField from "./CheckboxField";
-import DateField from "./DateField";
+import SelectField, { SelectConfig } from "./SelectField";
+import TextField, { TextInputConfig } from "./TextField";
+import CheckboxField, { CheckboxConfig } from "./CheckboxField";
+import DateField, { DateInputConfig } from "./DateField";
 import Label from "./Label";
+import Image, { ImageConfig } from "./Image";
 
 import styles from "./Field.module.scss";
-import { ZodTypeAny } from "zod";
 import classNames from "classnames";
 
-interface Option {
-  value: string;
-  label: string;
-}
+export type FieldConfig = DateInputConfig | SelectConfig | TextInputConfig | CheckboxConfig | ImageConfig;
 
-export interface FieldConfig {
-  key: string;
-  type: "select" | "text" | "checkboxes" | "date";
-  label: string;
-  value?: string | number | boolean | Date | Array<string> | null;
-  placeholder?: string;
-  options?: Array<Option> | ((data: Record<string, any>) => Array<Option>);
-  dependsOn?: string;
-  className?: string;
-  required?: boolean;
-  schema?: ZodTypeAny;
-}
-
-interface FieldProps extends Exclude<FieldConfig, "key"> {
+interface FieldProps {
+  config: FieldConfig;
   isDirty?: boolean;
   error?: string;
   data: Record<string, any>;
@@ -38,25 +23,13 @@ interface FieldProps extends Exclude<FieldConfig, "key"> {
 const typeToComponentMap = {
   select: SelectField,
   text: TextField,
-  checkboxes: CheckboxField,
+  checkbox: CheckboxField,
   date: DateField,
+  image: Image,
 };
 
-const Field: FC<FieldProps> = ({
-  type,
-  label,
-  value,
-  onChange,
-  onBlur,
-  className,
-  placeholder,
-  isDirty,
-  options,
-  dependsOn,
-  data,
-  error,
-}) => {
-  const Component = typeToComponentMap[type] as any;
+const Field: FC<FieldProps> = ({ config, onChange, onBlur, isDirty, data, error }) => {
+  const Component = typeToComponentMap[config.type] as any;
   const errorMessage = useMemo(() => {
     if (!error || !isDirty) return null;
     return (
@@ -67,16 +40,13 @@ const Field: FC<FieldProps> = ({
   }, [error, isDirty]);
 
   return (
-    <Label text={label} right={errorMessage}>
+    <Label text={config.label || ""} right={errorMessage}>
       <Component
         data={data}
         onChange={onChange}
-        value={value}
-        className={classNames(styles.Field, className, { [styles.error]: Boolean(error) })}
-        placeholder={placeholder}
+        config={config}
+        className={classNames(styles.Field, config.className, { [styles.error]: Boolean(error) })}
         onBlur={onBlur}
-        options={options}
-        dependsOn={dependsOn}
       />
     </Label>
   );

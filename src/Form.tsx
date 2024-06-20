@@ -52,12 +52,12 @@ const Form: FC<FormProps> = ({ fields, title, instructions, onChange, buttons, s
   const validate = useCallback((field: FieldConfig, value: string) => {
     let error = "";
 
-    const validation = field.schema?.safeParse(value) || { success: true };
-    if (field.required && !value) error = "This field is required.";
+    const validation = ("schema" in field && field.schema?.safeParse(value)) || { success: true };
+    if ("required" in field && field.required && !value) error = "This field is required.";
     else if (value && !validation.success) error = validation.error.errors[0].message;
 
     setErrors((state) => ({ ...state, [field.key]: error }));
-    return Boolean(error);
+    return error;
   }, []);
 
   /**
@@ -67,7 +67,7 @@ const Form: FC<FormProps> = ({ fields, title, instructions, onChange, buttons, s
     let isDirtyMap: Record<string, boolean> = {};
     let hasError = false;
     for (const field of fields.flat()) {
-      if (!validate(field, data[field.key])) hasError = true;
+      if (validate(field, data[field.key])) hasError = true;
       isDirtyMap[field.key] = true;
     }
     setIsDirtyMap(isDirtyMap);
@@ -94,10 +94,10 @@ const Form: FC<FormProps> = ({ fields, title, instructions, onChange, buttons, s
         <Flex className={styles.Row} key={"row_" + rowIndex}>
           {rowFields.map((field) => (
             <Field
-              {...field}
+              key={field.key}
+              config={field}
               onChange={handleChange.bind(null, field)}
               data={data}
-              value={data[field.key] || ""}
               error={errors[field.key]}
               isDirty={isDirtyMap[field.key]}
               onBlur={handleBlur.bind(null, field)}

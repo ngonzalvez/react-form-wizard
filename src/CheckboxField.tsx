@@ -1,9 +1,26 @@
 import { FC, useCallback, useState } from "react";
 import styles from "./CheckboxField.module.scss";
+import { ZodTypeAny } from "zod";
+
+interface Option {
+  value: string;
+  label: string;
+  checked?: boolean;
+}
+
+export interface CheckboxConfig {
+  type: "checkbox";
+  key: string;
+  label: string;
+  options: Option[];
+  placeholder?: string;
+  required?: boolean;
+  schema?: ZodTypeAny;
+  className?: string;
+}
 
 interface CheckboxFieldProps {
-  name: string;
-  options: string[] | Array<{ value: string; label: string }>;
+  config: CheckboxConfig;
   onChange: (values: Record<string, boolean>) => any;
   onBlur?: () => void | Promise<void>;
 }
@@ -11,12 +28,18 @@ interface CheckboxFieldProps {
 /**
  * A checkbox field.
  */
-const CheckboxField: FC<CheckboxFieldProps> = ({ name, options, onChange, onBlur }) => {
+const CheckboxField: FC<CheckboxFieldProps> = ({ config, onChange, onBlur }) => {
   //--------------------------------------------------------------------------------------------------------------------
   //                                                       STATE
   //--------------------------------------------------------------------------------------------------------------------
   const [values, setValues] = useState(
-    options.reduce((values, option) => ({ ...values, [option.value]: !!option.checked }), {})
+    config.options.reduce(
+      (values, option) => ({
+        ...values,
+        [typeof option === "string" ? option : option.value]: typeof option === "string" ? false : !!option.checked,
+      }),
+      {}
+    )
   );
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -27,7 +50,7 @@ const CheckboxField: FC<CheckboxFieldProps> = ({ name, options, onChange, onBlur
       const newValue = { ...values, [e.target.name]: e.target.checked };
       setValues(newValue);
       onChange(newValue);
-      onBlur();
+      onBlur?.();
     },
     [onChange]
   );
@@ -37,8 +60,8 @@ const CheckboxField: FC<CheckboxFieldProps> = ({ name, options, onChange, onBlur
   //--------------------------------------------------------------------------------------------------------------------
   return (
     <div className={styles.CheckboxField}>
-      {options.map((option) => (
-        <label className={styles.option} key={name + "_" + option.value}>
+      {config.options.map((option) => (
+        <label className={styles.option} key={option.value}>
           <input
             type="checkbox"
             name={option.value}
@@ -47,7 +70,7 @@ const CheckboxField: FC<CheckboxFieldProps> = ({ name, options, onChange, onBlur
             onChange={handleChange}
           />
           <span className={styles.checkmark}></span>
-          {option.label || option}
+          {option.label}
         </label>
       ))}
     </div>
