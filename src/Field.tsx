@@ -17,22 +17,22 @@ interface Option {
 export interface FieldConfig {
   key: string;
   type: "select" | "text" | "checkboxes" | "date";
-  data: Record<string, any>;
   label: string;
   value?: string | number | boolean | Date | Array<string> | null;
   placeholder?: string;
   options?: Array<Option> | ((data: Record<string, any>) => Array<Option>);
   dependsOn?: string;
   className?: string;
-  required: boolean;
+  required?: boolean;
   schema?: ZodTypeAny;
 }
 
 interface FieldProps extends Exclude<FieldConfig, "key"> {
   isDirty?: boolean;
+  error?: string;
+  data: Record<string, any>;
   onBlur?: () => void;
   onChange?: (value: any) => void;
-  error?: string;
 }
 
 const typeToComponentMap = {

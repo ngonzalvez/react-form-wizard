@@ -1,14 +1,15 @@
 import { FC, useState, useMemo, useCallback } from "react";
 import Progress from "./Progress";
-import styles from "./Wizard.module.scss";
+import styles from "./FormWizard.module.scss";
 import Form from "./Form";
-import { FieldProps } from "./Field";
+import { FieldConfig } from "./Field";
 import Button from "./Button";
 
 export interface WizardStep {
+  key: string;
   title?: string;
   instructions?: string;
-  fields: Array<FieldProps | FieldProps[]>;
+  fields: Array<FieldConfig | FieldConfig[]>;
 }
 
 interface WizardProps {

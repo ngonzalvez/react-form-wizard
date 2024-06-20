@@ -1,9 +1,10 @@
 import { createRoot } from "react-dom/client";
 import z from "zod";
 import { State, City } from "country-state-city";
-import Wizard, { WizardStep } from "./Wizard";
+import FormWizard, { WizardStep } from "./FormWizard";
 
 import "./styles.css";
+import Form from "./Form";
 
 const states = [
   { value: "NY", label: "New York" },
@@ -122,14 +123,19 @@ const formSteps: WizardStep[] = [
 ];
 
 const logData = (data: Record<string, any>) => {
-  console.log("Data:", data);
+  console.log("Form data changed:", data);
 };
 
 const onSubmit = (data: Record<string, any>) => {
   console.log("Submitting:", data);
 };
 
-const component = <Wizard steps={formSteps} submitLabel="Request RMA" onChange={logData} />;
+const { title, instructions, fields } = formSteps[0];
+
+// const component = <FormWizard steps={formSteps} submitLabel="Request RMA" onChange={logData} />;
+const component = (
+  <Form title={title} instructions={instructions} fields={fields} onChange={logData} onSubmit={onSubmit} />
+);
 
 const domNode = document.getElementById("root");
 if (!domNode) throw new Error("Couldnt find root element");
