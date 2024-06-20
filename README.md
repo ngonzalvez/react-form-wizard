@@ -2,7 +2,8 @@
 <p align="center">Create form wizards in minutes</p>
 <h1></h1>
 
-#### Important Note 
+#### Important Note
+
 This is a work in progress. I'm actively developing this library, you can expect it to be live in a few days.
 
 <p align="center">
@@ -10,86 +11,122 @@ This is a work in progress. I'm actively developing this library, you can expect
 </p>
 <h1></h1>
 
-
 #### Installation
+
 ```sh
 npm install rfw
 ```
+
 <h1></h1>
 
 #### Create a simple form
+
 Let's create a form with a single step.
 
 ```typescript
-import Wizard from 'rfw';
+import { Form } from "rfw";
 
-const formStep = {
-  title: 'Hi there!',
-  instructions: 'Tell us a little bit about you.',
-  fields: [
-    { key: 'name', label: 'Name', type: 'text', placeholder: 'John Smith' },
-    { key: 'email', label: 'Email', type: 'text', placeholder: 'john@smith.co' },
-  ]
-};
-<Wizard steps={[formStep]}/>
+<Form
+  title="Hi there!"
+  instructions="Tell us a little bit about you"
+  fields={[
+    { key: "name", type: "text", label: "Name", placeholder: "John Smith" },
+    { key: "email", type: "text", label: "Email", placeholder: "john@smith.co" },
+  ]}
+/>;
 ```
+
 <p align="center">
-  <img src="https://github.com/ngonzalvez/react-form-wizard/blob/main/images/simple-form.jpg" alt="Simple form"/>
+  <img src="https://github.com/ngonzalvez/react-form-wizard/blob/main/images/simple-form.png" alt="Simple form"/>
 </p>
 <h1></h1>
 
-#### Adding more steps
-In order to add more steps for your wizard, simply add the step config to the a `steps` array. When there's more than one step, you'll see the progress of the wizard at the top.
+#### Types of fields
+
+Right now the supported field types are: `input`, `select`, `date`, `checkbox`, `image`, `text`, `separator`.
+
+#### Creating a multi-step form wizard
 
 ```typescript
-<Wizard steps={[firstStep, secondStep, thirdStep]}/>
+import { FormWizard } from "rfw";
+
+// Form definition goes here...
+
+<FormWizard steps={[firstFormProps, secondFormProps, thirdFormProps]} />;
 ```
+
 <h1></h1>
 
 #### Multiple fields per row
-The `fields` array in the step config can contain a field description, or an array of field descriptions. If you pass an array of field descriptions, `wizard.js` will place those fields in the same row.
+
 ```typescript
 const formStep = {
   fields: [
     // Include both fields in the same row.
     [
-      { key: 'firstName', label: 'First name', type: 'text', placeholder: 'John' },
-      { key: 'lastName', label: 'Last name', type: 'text', placeholder: 'Smith' },
+      { key: "firstName", label: "First name", type: "text", placeholder: "John" },
+      { key: "lastName", label: "Last name", type: "text", placeholder: "Smith" },
     ],
-    { key: 'email', label: 'Email', type: 'text', placeholder: 'john@smith.co' },
-  ]
+    { key: "email", label: "Email", type: "text", placeholder: "john@smith.co" },
+  ],
 };
-<Wizard steps={[formStep]}/>
+<Wizard steps={[formStep]} />;
 ```
+
 <p align="center">
-  <img src="https://github.com/ngonzalvez/react-form-wizard/blob/main/images/multiple-fields-per-row.jpg" alt="Multiple fields per row"/>
+  <img src="https://github.com/ngonzalvez/react-form-wizard/blob/main/images/multiple-fields-per-row.png" alt="Multiple fields per row"/>
 </p>
 <h1></h1>
 
-#### Having a field depend on another field
-Sometimes the options available for one field is dependant on the value of another field.For example, when entering the address the cities you can choose are dictated by the state you have previously selected. 
+#### Field dependant on another field
+
+Sometimes the options available for one field is dependant on the value of another field. For example, when entering the address, the cities you can choose are dictated by the state you have previously selected.
+
 ```typescript
-const formStep = {
-  fields: [
-      { key: 'state', label: 'State', type: 'select', options: getAllStates() },
-      { key: 'city', label: 'City', type: 'select', dependsOn: 'state', options: (data) => getAllCitiesByState(data.state) },
-  ]
-};
-<Wizard steps={[formStep]}/>
+<Form
+  fields={[
+    {
+      key: "state",
+      type: "select",
+      label: "State",
+      options: getAllStates(),
+    },
+    {
+      key: "city",
+      type: "select",
+      label: "City",
+      dependsOn: "state", // This will update the field every time the dependency changes.
+      options: (data) => getAllCitiesByState(data.state),
+    },
+  ]}
+/>
 ```
+
 <h1></h1>
 
 #### Form submission
-Use the `onSubmit` prop to pass your submission handler function.
 
 ```typescript
-const handleSubmit = (data: Record<string, any>) => console.log('Form data:', data);
+const handleSubmit = (formData) => console.log(formData);
 
-<Wizard steps={[formStep]} onSubmit={handleSubmit]/>
+<Form fields={fields} onSubmit={handleSubmit}>
 ```
+
 <h1></h1>
 
+#### What's next?
+
+Some of the features that will soon be available are:
+
+- Custom styles
+- Ability to conditionally skip steps
+- Conditional step navigation
+- Support for custom components
+
+If you'd like to suggest a new feature feel free to create an issue or drop me a line at nico@ncode.uy.
+
 #### Built With
+
 - [Typescript](https://www.typescriptlang.org)
 - [React](https://react.dev)
-- [classnames](https://github.com/JedWatson/classnames) 
+- [classnames](https://github.com/JedWatson/classnames)
