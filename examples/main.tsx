@@ -1,10 +1,10 @@
 import { createRoot } from "react-dom/client";
 import z from "zod";
 import { State, City } from "country-state-city";
-import FormWizard, { WizardStep } from "./FormWizard";
+import FormWizard, { WizardStep } from "../src/FormWizard";
+import Form from "../src/Form";
 
 import "./styles.css";
-import Form from "./Form";
 
 const states = [
   { value: "NY", label: "New York" },

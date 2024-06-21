@@ -2,10 +2,6 @@
 <p align="center">Create form wizards in minutes</p>
 <h1></h1>
 
-#### Important Note
-
-This is a work in progress. I'm actively developing this library, you can expect it to be live in a few days.
-
 <p align="center">
   <img src="https://github.com/ngonzalvez/react-form-wizard/blob/main/images/demo.gif" alt="RFW Demo"/>
 </p>
