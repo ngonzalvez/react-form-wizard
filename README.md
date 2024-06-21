@@ -1,6 +1,5 @@
 <h3 align="center">React Form Wizard</h3>
 <p align="center">Create form wizards in minutes</p>
-<h1></h1>
 
 <p align="center">
   <img src="https://github.com/ngonzalvez/react-form-wizard/blob/main/images/demo.gif" alt="RFW Demo"/>
@@ -120,6 +119,8 @@ Some of the features that will soon be available are:
 - Support for custom components
 
 If you'd like to suggest a new feature feel free to create an issue or drop me a line at nico@ncode.uy.
+
+<h1></h1>
 
 #### Built With
 
